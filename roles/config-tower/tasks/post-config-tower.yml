@@ -1,5 +1,12 @@
 - name: Create Homework Assignment project
-
+  tower_project:
+    name: "{{ proj_name }}"
+    description: "Homework Assignment project"
+    organization: "{{ org_name }}"
+    state: present
+    scm_type: "git"
+    scm_url: "{{ github_repo }}"
+    scm_branch: master
 
 - name: Machine Credentail to connect to workstation using openstack.pub
   tower_credential:
@@ -9,7 +16,7 @@
     kind: ssh
     tower_host: tower1.{{tower_GUID}}.example.opentlc.com
     tower_username: admin
-    tower_password: r3dh4t1!
+    tower_password: "{{pass}}"
     ssh_key_data: "/root/.ssh/openstack.pem"
     username: cloud-user
 
@@ -17,9 +24,9 @@
   command: |
     tower-cli inventory create -n "{{static_inventory_name}}" --organization "{{org_name}}"
 
-- name: Create Group in static inventory 
+- name: Create Group in static inventory
   command: |
-    tower-cli group create --inventory "{{static_inventory_name}}"  --name {{group_name}}
+    tower-cli group create --inventory "{{static_inventory_name}}" --name {{group_name}}
 
 
 - name: Add tower host
@@ -30,7 +37,7 @@
     state: present
     tower_host: tower1.{{tower_GUID}}.example.opentlc.com
     tower_username: admin
-    tower_password: r3dh4t1!
+    tower_password: "{{pass}}"
     tower_verify_ssl: no
 
 - name: Associate workstation host to group 
@@ -46,7 +53,7 @@
     kind: ssh
     tower_host: tower1.{{tower_GUID}}.example.opentlc.com
     tower_username: admin
-    tower_password: r3dh4t1!
+    tower_password: "{{pass}}"
     tower_verify_ssl: no
     ssh_key_data: /root/.ssh/mykey.pem
     username: "{{ opentlc_login }}"
