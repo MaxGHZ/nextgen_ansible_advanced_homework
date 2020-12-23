@@ -1,5 +1,4 @@
 ---
-
 - name: Install postgres sql server
   yum:
     name: postgresql-server
